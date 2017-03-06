@@ -5,67 +5,79 @@ using UnityEngine;
 public class RaceCamera : MonoBehaviour {
 
     public Transform Target;
-    float Yaw;
+    float Yaw = 0;
     float Pitch;
-    public float FixedCameraDistance = 5;
-    public float camSpeed = 5;
     public float PitchClamp = 13;
+
+    public float MachineCamDistance = 10;
+    public float StdMachineCamHight = 15;
+    public float camSpeed = 1;
+
 
 	
 	// Update is called once per frame
 	void LateUpdate () {
-        //get yaw and pitch from the controller
+
+        ////get yaw and pitch from the controller
         //Yaw += Input.GetAxisRaw("RightAnalogX");
-        Pitch += Input.GetAxisRaw("RightAnalogY");
+        //Pitch += Input.GetAxisRaw("RightAnalogY");
 
-        //clamp the camera
-        Pitch = Mathf.Clamp(Pitch, -PitchClamp, PitchClamp);
+        ////clamp the camera
+        //Pitch = Mathf.Clamp(Pitch, -PitchClamp, PitchClamp);
 
-        //tranform camera with the yaw and the pitch
-        //transform.eulerAngles = new Vector3(Pitch, Yaw) *  camSpeed;
+        //look = Quaternion.LookRotation(Target.forward);
 
-        //get negative value for left side
-        //float angle = transform.eulerAngles.y;
-        //float angleTarget = Target.eulerAngles.y;
-        //angle = (angle > 180) ? angle - 360 : angle;
-        //angleTarget = (angleTarget > 180) ? angleTarget - 360 : angleTarget;
+        //Quaternion targetRotation = Quaternion.Euler(new Vector3(0, Target.eulerAngles.y));
 
-        //float angleDifference = angleTarget - angle;
-
-        float angleDifference = Target.eulerAngles.y - transform.eulerAngles.y;
-        //print(angle + "_____" + angleTarget+"_____"+angleDifference);
-        print(transform.eulerAngles.y+"_________"+Target.eulerAngles.y);
-
-        if (Target.eulerAngles.y > 355)
-        {
-            Vector3 rot = transform.eulerAngles;
-            rot.y -= 360;
-            rot.x = transform.eulerAngles.x;
-            transform.eulerAngles = rot;
-        }
-
-
-
-
-
-
-        if (angleDifference > 59)
-        {
-            Vector3 rot = Target.eulerAngles;
-            rot.y -= 59;
-            rot.x = transform.eulerAngles.x;
-            transform.eulerAngles = rot;
-        }
-        else if (angleDifference < -59)
-        {
-            Vector3 rot = Target.eulerAngles;
-            rot.y += 59;
-            rot.x = transform.eulerAngles.x;
-            transform.eulerAngles = rot;
-        }
-
-        //calculate position of the camera, MUST happen AFTER the rotation
-        Vector3 camPos = Target.position - transform.forward * FixedCameraDistance;
+        
+        //calculate position of the camera, MUST happen AFTER the rotation or camera will stutter
+        Vector3 camPos = Target.position - transform.forward * MachineCamDistance; //good vector
         transform.position = camPos;
+
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Target.forward), Time.fixedDeltaTime);
+
     }
+
+    //Transform carCam;
+    //Transform car;
+    //Rigidbody carPhysics;
+
+    //[Tooltip("If car speed is below this value, then the camera will default to looking forwards.")]
+    //public float rotationThreshold = 1f;
+
+    //[Tooltip("How closely the camera follows the car's position. The lower the value, the more the camera will lag behind.")]
+    //public float cameraStickiness = 10.0f;
+
+    //[Tooltip("How closely the camera matches the car's velocity vector. The lower the value, the smoother the camera rotations, but too much results in not being able to see where you're going.")]
+    //public float cameraRotationSpeed = 5.0f;
+
+    //void Awake()
+    //{
+    //    carCam = Camera.main.GetComponent<Transform>();
+    //    car = GetComponent<Transform>();
+    //    carPhysics = car.GetComponent<Rigidbody>();
+    //}
+
+
+    //void FixedUpdate()
+    //{
+    //    Quaternion look;
+
+    //    //displaced car position (generates an output camera position separate from car's)
+    //    Vector3 targetCarPosition = new Vector3(car.position.x, car.position.y + 3, car.position.z - 8);
+
+    //    // Moves the camera to match the car's position.
+    //    carCam.position = Vector3.Lerp(carCam.position, targetCarPosition, cameraStickiness * Time.fixedDeltaTime);
+
+    //    // If the car isn't moving, default to looking forwards. Prevents camera from freaking out with a zero velocity getting put into a Quaternion.LookRotation
+    //    if (carPhysics.velocity.magnitude < rotationThreshold)
+    //        look = Quaternion.LookRotation(car.forward);
+    //    else
+    //        look = Quaternion.LookRotation(car.forward); //Quaternion.LookRotation(carPhysics.velocity.normalized);
+
+    //    // Rotate the camera towards the velocity vector.
+    //    look = Quaternion.Slerp(carCam.rotation, look, cameraRotationSpeed * Time.fixedDeltaTime);
+    //    carCam.rotation = look;
+    //}
 }
+
