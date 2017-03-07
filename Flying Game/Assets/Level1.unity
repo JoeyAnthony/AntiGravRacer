@@ -344,7 +344,7 @@ Prefab:
     - target: {fileID: 114825507750249716, guid: b9ae06b708779cb409525c5c620c115d,
         type: 2}
       propertyPath: RotationSpeed
-      value: 40
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 54832931948045160, guid: b9ae06b708779cb409525c5c620c115d,
         type: 2}
@@ -479,7 +479,7 @@ MonoBehaviour:
   PitchClamp: 13
   MachineCamDistance: 10
   StdMachineCamHight: 15
-  camSpeed: 5
+  camSpeed: 0.5
 --- !u!1 &1926012824
 GameObject:
   m_ObjectHideFlags: 0

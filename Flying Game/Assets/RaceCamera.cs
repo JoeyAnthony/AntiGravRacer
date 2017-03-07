@@ -11,9 +11,9 @@ public class RaceCamera : MonoBehaviour {
 
     public float MachineCamDistance = 10;
     public float StdMachineCamHight = 15;
-    public float camSpeed = 1;
+    public float camSpeed = 0.1f;
 
-
+    Quaternion EnLdocation;
 	
 	// Update is called once per frame
 	void LateUpdate () {
@@ -25,59 +25,19 @@ public class RaceCamera : MonoBehaviour {
         ////clamp the camera
         //Pitch = Mathf.Clamp(Pitch, -PitchClamp, PitchClamp);
 
-        //look = Quaternion.LookRotation(Target.forward);
 
-        //Quaternion targetRotation = Quaternion.Euler(new Vector3(0, Target.eulerAngles.y));
+        //calculate the rotation of the camera. interpolates to target y rotation
+        Quaternion rot = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Target.forward), Time.fixedDeltaTime / camSpeed);
 
-        
+
+        //set y rotation and x rotation
+        transform.eulerAngles = new Vector3(StdMachineCamHight, rot.eulerAngles.y, 0);
+
         //calculate position of the camera, MUST happen AFTER the rotation or camera will stutter
         Vector3 camPos = Target.position - transform.forward * MachineCamDistance; //good vector
         transform.position = camPos;
 
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Target.forward), Time.fixedDeltaTime);
 
     }
-
-    //Transform carCam;
-    //Transform car;
-    //Rigidbody carPhysics;
-
-    //[Tooltip("If car speed is below this value, then the camera will default to looking forwards.")]
-    //public float rotationThreshold = 1f;
-
-    //[Tooltip("How closely the camera follows the car's position. The lower the value, the more the camera will lag behind.")]
-    //public float cameraStickiness = 10.0f;
-
-    //[Tooltip("How closely the camera matches the car's velocity vector. The lower the value, the smoother the camera rotations, but too much results in not being able to see where you're going.")]
-    //public float cameraRotationSpeed = 5.0f;
-
-    //void Awake()
-    //{
-    //    carCam = Camera.main.GetComponent<Transform>();
-    //    car = GetComponent<Transform>();
-    //    carPhysics = car.GetComponent<Rigidbody>();
-    //}
-
-
-    //void FixedUpdate()
-    //{
-    //    Quaternion look;
-
-    //    //displaced car position (generates an output camera position separate from car's)
-    //    Vector3 targetCarPosition = new Vector3(car.position.x, car.position.y + 3, car.position.z - 8);
-
-    //    // Moves the camera to match the car's position.
-    //    carCam.position = Vector3.Lerp(carCam.position, targetCarPosition, cameraStickiness * Time.fixedDeltaTime);
-
-    //    // If the car isn't moving, default to looking forwards. Prevents camera from freaking out with a zero velocity getting put into a Quaternion.LookRotation
-    //    if (carPhysics.velocity.magnitude < rotationThreshold)
-    //        look = Quaternion.LookRotation(car.forward);
-    //    else
-    //        look = Quaternion.LookRotation(car.forward); //Quaternion.LookRotation(carPhysics.velocity.normalized);
-
-    //    // Rotate the camera towards the velocity vector.
-    //    look = Quaternion.Slerp(carCam.rotation, look, cameraRotationSpeed * Time.fixedDeltaTime);
-    //    carCam.rotation = look;
-    //}
 }
 

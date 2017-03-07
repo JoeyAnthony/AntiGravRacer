@@ -24,6 +24,7 @@ public class ControlP1 : MonoBehaviour
         
         //clamp the camera
         Pitch = Mathf.Clamp(Pitch, -PitchClamp, PitchClamp);
+
     }
 
     private void FixedUpdate()
