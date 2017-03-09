@@ -35,13 +35,13 @@ public class ControlP1 : MonoBehaviour
             Velocity += Input.GetAxisRaw("LeftAnalogZ") * speed;
             
         }
-        //else
-        //{
-        //    Velocity -= speed * 2;
-        //}
+        else
+        {
+            Velocity -= speed * 2;
+        }
 
-            
-        //Velocity = Mathf.Clamp(Velocity, 0, 1000);
+
+        Velocity = Mathf.Clamp(Velocity, 0, 1000);
 
         print(Velocity +"___"+ Input.GetAxisRaw("KeyUpDown"));
 
@@ -51,8 +51,8 @@ public class ControlP1 : MonoBehaviour
     {
         Vector3 a = new Vector3(Pitch, Yaw) * RotationSpeed * Time.smoothDeltaTime;
         RbPlayer.rotation = (Quaternion.Euler(a));
-        
-        RbPlayer.position = RbPlayer.transform.forward * Velocity * Time.fixedDeltaTime;
+        Vector3 mov = RbPlayer.transform.forward * Velocity * Time.fixedDeltaTime;
+        RbPlayer.position = RbPlayer.position + mov;
     }
 
 }
