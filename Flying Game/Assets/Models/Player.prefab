@@ -133,5 +133,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b11578480c2bf04c92538ebe995d504, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PitchClamp: 20
-  RotationSpeed: 5
+  pitchClamp: 20
+  rotationSpeed: 100
+  acceleration: 10
+  desceleration: 20
+  maxVelocity: 3000
+  maxSpeed_Vector: 200
