@@ -22,7 +22,8 @@ public class ControlP1 : MonoBehaviour
 
     void Start()
     {
-        RbPlayer = GameObject.FindGameObjectWithTag("Player1").GetComponent<Rigidbody>();
+        RbPlayer = GetComponent<Rigidbody>();
+
     }
     
     void Update()
@@ -59,6 +60,7 @@ public class ControlP1 : MonoBehaviour
         Vector3 rayDir = transform.TransformDirection(Vector3.down);
         Physics.Raycast(transform.position, rayDir, out hitInfo, 5);
         //raycast position needs a change
+        //hitInfo.
 
         
 
@@ -70,6 +72,8 @@ public class ControlP1 : MonoBehaviour
         //rotation vector multiply with normal of the road and slerp
         Vector3 rotationInput = new Vector3(pitch, yaw) * rotationSpeed;
         RbPlayer.rotation =  Quaternion.Slerp(RbPlayer.rotation, roadNormal * Quaternion.Euler(rotationInput * Time.fixedDeltaTime), 0.5f);
+        
+        //add forward force
         RbPlayer.AddRelativeForce(Vector3.forward * addedVelocity);
 
         //store the rigidbody velocity for the gravity
