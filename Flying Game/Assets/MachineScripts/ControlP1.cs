@@ -47,7 +47,7 @@ public class ControlP1 : MonoBehaviour
         {
             velocity -= desceleration;
             velocity = Mathf.Clamp(velocity, 0, maxVelocity);
-
+            
             addedVelocity = 0;
         }
 
@@ -55,26 +55,39 @@ public class ControlP1 : MonoBehaviour
 
     }
 
+
     private void FixedUpdate()
     {
-        Vector3 rayDir = transform.TransformDirection(Vector3.down);
-        Physics.Raycast(transform.position, rayDir, out hitInfo, 5);
-        //raycast position needs a change
-        //hitInfo.
-
-        
-
-        Debug.DrawLine(transform.position, transform.position + rayDir * 5, Color.green);
-
-
-        //take normal from surface of the road
+        Vector3 rayDir = RbPlayer.transform.TransformDirection(Vector3.down);
+        bool hit = Physics.Raycast(RbPlayer.transform.position, rayDir, out hitInfo, 2);
         Quaternion roadNormal = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
+        if (hit)
+        {
+            if (hitInfo.transform.tag.Equals("Road"))
+            {
+                RbPlayer.position = RbPlayer.position + roadNormal.eulerAngles;
+            }
+        }
+        
+        Debug.DrawLine(RbPlayer.transform.position, RbPlayer.transform.position + rayDir * 5, Color.green);
+
+                //take normal from surface of the road
+        
         //rotation vector multiply with normal of the road and slerp
         Vector3 rotationInput = new Vector3(pitch, yaw) * rotationSpeed;
-        RbPlayer.rotation =  Quaternion.Slerp(RbPlayer.rotation, roadNormal * Quaternion.Euler(rotationInput * Time.fixedDeltaTime), 0.5f);
-        
+        RbPlayer.rotation = Quaternion.Slerp(RbPlayer.rotation, roadNormal * Quaternion.Euler(rotationInput * Time.fixedDeltaTime), 0.5f);
+
+        ////take normal from surface of the road
+        //Quaternion roadNormal = Quaternion.FromToRotation(Vector3.up, hitInfo.normal);
+        ////rotation vector multiply with normal of the road and slerp
+        //Vector3 rotationInput = new Vector3(pitch, yaw) * rotationSpeed;
+        //RbPlayer.rotation = Quaternion.Slerp(RbPlayer.rotation, roadNormal * Quaternion.Euler(rotationInput * Time.fixedDeltaTime), 0.5f);
+
+
         //add forward force
-        RbPlayer.AddRelativeForce(Vector3.forward * addedVelocity);
+        RbPlayer.AddRelativeForce( Vector3.forward * addedVelocity + roadNormal.eulerAngles);
+        
+        Debug.DrawLine(RbPlayer.transform.position, RbPlayer.transform.position + RbPlayer.velocity * 5, Color.red);
 
         //store the rigidbody velocity for the gravity
         Vector3 rigidbodyVelocity = RbPlayer.velocity;
@@ -87,8 +100,21 @@ public class ControlP1 : MonoBehaviour
         Vector3 newVelocityVector = transform.forward * Mathf.Clamp(rigidbodyVelocityNoY.magnitude, 0, maxSpeed_Vector); 
         newVelocityVector.y = 0;
 
-        //add gravity to the direction
-        Vector3 actualVelocityVector = new Vector3(0, rigidbodyVelocity.y, 0) + newVelocityVector;
-        RbPlayer.velocity = actualVelocityVector;
+        if (hit)
+        {
+            //Vector3 actualVelocityVector = new Vector3(0, rigidbodyVelocity.y, 0) + newVelocityVector;
+            RbPlayer.velocity = newVelocityVector;
+        }
+        else
+        {
+            //add gravity to the right direction
+            Vector3 actualVelocityVector = new Vector3(0, rigidbodyVelocity.y, 0) + newVelocityVector;
+            RbPlayer.velocity = actualVelocityVector;
+        }
+
+
+        print(RbPlayer.velocity);
+
+
     }
 }
