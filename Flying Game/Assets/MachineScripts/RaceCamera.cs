@@ -14,9 +14,14 @@ public class RaceCamera : MonoBehaviour {
     public float camSpeed = 0.1f;
 
     Quaternion EnLdocation;
-	
-	// Update is called once per frame
-	void LateUpdate () {
+
+    // Update is called once per frame
+    void Start()
+    {
+
+    }
+
+    void LateUpdate () {
 
         ////get yaw and pitch from the controller
         //Yaw += Input.GetAxisRaw("RightAnalogX");
