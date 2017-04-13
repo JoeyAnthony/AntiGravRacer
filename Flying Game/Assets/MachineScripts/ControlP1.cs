@@ -93,9 +93,13 @@ public class ControlP1 : MonoBehaviour
 
         Vector3 vel = RbPlayer.velocity;
         float y = vel.y;
+        vel.y = 0;
 
 
         Vector3 endDir = RbPlayer.transform.forward * vel.magnitude - vel;
+        Vector3 downDir = y * Vector3.down - endDir;
+        downDir = downDir.normalized * 2;
+
         if (hit)
         {
             RbPlayer.useGravity = false;
@@ -105,7 +109,7 @@ public class ControlP1 : MonoBehaviour
             RbPlayer.useGravity = true;
         }
 
-        RbPlayer.velocity += endDir;
+        RbPlayer.velocity += endDir + downDir;
         
 
 
