@@ -88,29 +88,37 @@ public class ControlP1 : MonoBehaviour
         Debug.DrawLine(RbPlayer.transform.position, RbPlayer.transform.position + rayDir * 5, Color.green);
         Debug.DrawLine(hitInfo.point, hitInfo.point + RbPlayer.transform.up * 100, Color.blue);
 
-
-        RbPlayer.AddRelativeForce(Vector3.forward * addedVelocity, ForceMode.Acceleration);
+        
 
         Vector3 vel = RbPlayer.velocity;
         float y = vel.y;
         vel.y = 0;
 
+        
+        
 
-        Vector3 endDir = RbPlayer.transform.forward * vel.magnitude - vel;
-        Vector3 downDir = y * Vector3.down - endDir;
-        downDir = downDir.normalized * 2;
+        //Vector3 downDir = y * Vector3.down - endDir;
+        //downDir = downDir.normalized * 2;
 
         if (hit)
         {
             RbPlayer.useGravity = false;
+            fallingSpeed = y;
         }
         else
         {
             RbPlayer.useGravity = true;
+            fallingSpeed++;
         }
 
-        RbPlayer.velocity += endDir + downDir;
-        
+        RbPlayer.AddRelativeForce(addedVelocity * Vector3.forward);
+        Vector3 endDir = RbPlayer.transform.forward * vel.magnitude + fallingSpeed * Vector3.down - vel;
+
+        RbPlayer.AddForce(getAngledForce(endDir));
+
+        //RbPlayer.AddForce(getAngledForce(endDir));
+        //RbPlayer.velocity += endDir + downDir;
+
 
 
 
@@ -119,10 +127,11 @@ public class ControlP1 : MonoBehaviour
         print("velocity: " + RbPlayer.velocity);
         print("endDir= " + endDir);
         print("dir: " + RbPlayer.transform.forward);
+        print("fallinspeed: " + fallingSpeed);
     }
 
-    public float getForce(float force)
+    public Vector3 getAngledForce(Vector3 force)
     {
-        return force / (50 * RbPlayer.mass);
+        return force * (50 * RbPlayer.mass);
     }
 }
