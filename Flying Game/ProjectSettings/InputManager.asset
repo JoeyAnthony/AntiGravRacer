@@ -10,7 +10,7 @@ InputManager:
     descriptiveName: Should be the 'A' button an the controller
     descriptiveNegativeName: 
     negativeButton: 
-    positiveButton: joystick button 0
+    positiveButton: 0
     altNegativeButton: 
     altPositiveButton: 
     gravity: 1000

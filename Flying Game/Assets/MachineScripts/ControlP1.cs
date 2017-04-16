@@ -41,10 +41,10 @@ public class ControlP1 : MonoBehaviour
         //clamp x rotation
         //Pitch = Mathf.Clamp(Pitch, -PitchClamp, PitchClamp);
 
-        if (Input.GetAxisRaw("KeyUpDown") > 0 || Input.GetAxisRaw("LeftAnalogY") > 0)
+        if (Input.GetAxisRaw("KeyUpDown") > 0 || Input.GetAxisRaw("A") > 0)
         {
             velocity += (Input.GetAxisRaw("KeyUpDown") * acceleration) / accelerationDevider;
-            velocity += (Input.GetAxisRaw("LeftAnalogY") * acceleration) / accelerationDevider;
+            velocity += (Input.GetAxisRaw("A") * acceleration) / accelerationDevider;
 
             velocity = Mathf.Clamp(velocity, 0, maxVelocity);
 
@@ -76,7 +76,7 @@ public class ControlP1 : MonoBehaviour
 
         //raycast to detect the road
         Vector3 rayDir = RbPlayer.transform.TransformDirection(Vector3.down);
-        bool hit = Physics.Raycast(RbPlayer.transform.position, rayDir, out hitInfo, 2.5f);
+        bool hit = Physics.Raycast(RbPlayer.transform.position, rayDir, out hitInfo, 5f);
         if (hit)
         {
             //set object above the road
@@ -92,42 +92,33 @@ public class ControlP1 : MonoBehaviour
 
         Vector3 vel = RbPlayer.velocity;
         float y = vel.y;
-        vel.y = 0;
-
+        y = 0;
         
-        
-
-        //Vector3 downDir = y * Vector3.down - endDir;
-        //downDir = downDir.normalized * 2;
-
         if (hit)
         {
             RbPlayer.useGravity = false;
-            fallingSpeed = y;
+            fallingSpeed = 0;
         }
         else
         {
             RbPlayer.useGravity = true;
-            fallingSpeed++;
+            fallingSpeed+= 2;
         }
 
         RbPlayer.AddRelativeForce(addedVelocity * Vector3.forward);
-        Vector3 endDir = RbPlayer.transform.forward * vel.magnitude + fallingSpeed * Vector3.down - vel;
+        Vector3 endDir = RbPlayer.transform.forward * vel.magnitude - vel;
+        Vector3 fallVec = (fallingSpeed * Vector3.down - endDir).normalized * fallingSpeed;
 
-        RbPlayer.AddForce(getAngledForce(endDir));
+        RbPlayer.AddForce(getAngledForce(endDir + fallVec));
 
-        //RbPlayer.AddForce(getAngledForce(endDir));
-        //RbPlayer.velocity += endDir + downDir;
-
-
-
+        if (RbPlayer.velocity.magnitude > maxSpeed_Vector)
+        {
+            RbPlayer.velocity = Vector3.ClampMagnitude(RbPlayer.velocity, maxSpeed_Vector);
+        }
 
         Debug.DrawLine(RbPlayer.transform.position, RbPlayer.transform.position + RbPlayer.velocity * 5, Color.red);
 
-        print("velocity: " + RbPlayer.velocity);
-        print("endDir= " + endDir);
-        print("dir: " + RbPlayer.transform.forward);
-        print("fallinspeed: " + fallingSpeed);
+        print("velocitymag: " + RbPlayer.velocity.magnitude);
     }
 
     public Vector3 getAngledForce(Vector3 force)
