@@ -6,11 +6,11 @@ InputManager:
   serializedVersion: 2
   m_Axes:
   - serializedVersion: 3
-    m_Name: A
+    m_Name: AButton
     descriptiveName: Should be the 'A' button an the controller
     descriptiveNegativeName: 
     negativeButton: 
-    positiveButton: 0
+    positiveButton: joystick button 0
     altNegativeButton: 
     altPositiveButton: 
     gravity: 1000
@@ -18,7 +18,7 @@ InputManager:
     sensitivity: 1000
     snap: 0
     invert: 0
-    type: 0
+    type: 2
     axis: 0
     joyNum: 0
   - serializedVersion: 3
@@ -198,11 +198,11 @@ InputManager:
     axis: 1
     joyNum: 0
   - serializedVersion: 3
-    m_Name: Not
+    m_Name: G
     descriptiveName: 
     descriptiveNegativeName: 
-    negativeButton: 
-    positiveButton: 
+    negativeButton: h
+    positiveButton: g
     altNegativeButton: 
     altPositiveButton: 
     gravity: 0
@@ -210,6 +210,6 @@ InputManager:
     sensitivity: 1
     snap: 1
     invert: 0
-    type: 2
-    axis: 4
+    type: 0
+    axis: 0
     joyNum: 0
