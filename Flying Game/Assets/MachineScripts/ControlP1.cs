@@ -13,7 +13,7 @@ public class ControlP1 : MonoBehaviour
     public float hoverDistance = 2;
 
     public float pitchClamp = 20;
-    public float rotationSpeed = 100;
+    public float rotationSpeed = 10;
 
     public float acceleration = 1;
     public float desceleration = 20;
@@ -46,6 +46,15 @@ public class ControlP1 : MonoBehaviour
     
     void Update()
     {
+      
+
+        checkDeath();
+    }
+
+
+    void FixedUpdate()
+    {
+
         //get yaw and pitch from the controller
         yaw += Input.GetAxisRaw("LeftAnalogX");
         yaw += Input.GetAxisRaw("KeyLeftRight");
@@ -70,12 +79,8 @@ public class ControlP1 : MonoBehaviour
 
             addedVelocity = 0;
         }
-        checkDeath();
-    }
 
 
-    void FixedUpdate()
-    {
         //raycast to detect the road
         Vector3 rayDir = RbPlayer.transform.TransformDirection(Vector3.down);
         Vector3 rotationInput = new Vector3();
